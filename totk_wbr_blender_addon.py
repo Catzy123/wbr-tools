@@ -1,4 +1,4 @@
-﻿bl_info = {
+bl_info = {
     "name": "TotK WBR Blur Writer",
     "author": "Catzy123",
     "version": (1, 0, 0),
@@ -311,7 +311,12 @@ class TOTK_PT_blur_writer(bpy.types.Panel):
         layout.label(text=f"Active Action: {action.name if action else 'None'}")
 
         row = layout.row(align=True)
-        row.prop_search(settings, "action_name", bpy.data, "actions", text="Action Name")
+        try:
+            # lets you type any name, not just existing actions (Blender 3.3+)
+            row.prop_search(settings, "action_name", bpy.data, "actions",
+                            text="Action Name", results_are_suggestions=True)
+        except TypeError:
+            row.prop(settings, "action_name")
         row.operator("totk.sync_active_action", text="", icon="FILE_REFRESH")
 
         row = layout.row(align=True)
